@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+	<!-- Scan path -->
+	<context:component-scan base-package="com.pss.*" />
+
+	<!-- Anatation -->
+	<mvc:annotation-driven />
+	
+	<!-- Jsp view Resolver -->
+	<bean id="jspViewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.InternalResourceView" />
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	<!-- Setup Freemarker properties configuration -->  
+	<bean id="freemarkerConfiguration" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="location" value="classpath:com/pss/properties/freemarker.properties" />
+	</bean>
+	
+	<bean id="freeMarkerViewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name="contentType" value="text/html;charset=UTF-8"/>		
+		<property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>
+		<property name="suffix" value=".html"/>
+		<property name="cache" value="true"/>
+		<property name="exposeSessionAttributes" value="true"/>
+		<property name="exposeRequestAttributes" value="true"/>
+		<property name="exposeSpringMacroHelpers" value="true"/>
+		<!-- 在页面中使用${rc.contextPath}就可获得contextPath -->
+		<property name="requestContextAttribute" value="rc"/>
+		<property name="order" value="0"/>  
+	</bean>
+	
+	<bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape"/>
+
+	<bean id="FreeMarkerConfigurer" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<property name="templateLoaderPath" value="/WEB-INF/ftl/"/>
+		<property name="defaultEncoding" value="UTF-8"/>
+		<property name="freemarkerSettings" ref="freemarkerConfiguration"/>
+		<property name="freemarkerVariables">
+			<map>
+				<entry key="xml_escape" value-ref="fmXmlEscape"/>
+			</map>
+		</property>
+	</bean>
+	
+	<!-- don't handle the static resource -->
+	<mvc:default-servlet-handler />
+	
+	<!-- 对静态资源文件的访问 -->  
+	<!-- <mvc:resources mapping="/images/**" location="/images/" cache-period="31556926"/>
+	<mvc:resources mapping="/js/**" location="/js/" cache-period="31556926" />
+	<mvc:resources mapping="/css/**" location="/css/" cache-period="31556926" />
+	<mvc:resources mapping="/upload/**" location="/upload/" cache-period="31556926" /> -->
+</beans>

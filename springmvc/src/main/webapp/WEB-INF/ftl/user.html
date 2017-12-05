@@ -1,0 +1,53 @@
+<#assign base=rc.contextPath />
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="pengs1">
+		<base id="base" href="${base}">
+		<title>Spring Boot - hello</title>
+		<!-- Bootstrap core CSS -->
+		<link href="${base}/css/bootstrap.css" rel="stylesheet">
+		<link href="${base}/css/main.css" rel="stylesheet">
+	</head>
+	<body>
+		<div class="container">
+			<div class="page-header">
+				<h1>Sprint Boot: Hello</h1>
+			</div>
+				<table>
+					<#list users as user>
+						<tr>
+							<td style="word-break:break-all">
+								${user.name}
+							</td>
+							<td style="word-break:break-all">
+								<#if (user.age>20)>
+									Age is above 20!
+								<#elseif (user.age<=20)>
+									Age is smaller than 20!
+								<#else>
+									Unknow age!
+								</#if>
+							</td>
+						</tr>
+					</#list>
+				</table>
+			<br /><br />
+		</div>
+		<footer class="footer">
+			<div class="container">
+				<p class="text-muted">©2016 pengs1</p>
+			</div>
+		</footer>
+		<script src="${base}/js/jquery.js"></script>
+		<script src="${base}/js/bootstrap.js"></script>
+	</body>
+</html>
+<script>
+$(document).ready(function() {
+});
+</script>

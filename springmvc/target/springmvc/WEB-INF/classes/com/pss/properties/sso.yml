@@ -1,0 +1,9 @@
+project:
+  version: 1.01
+
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/test_demo?characterEncoding=utf8&useSSL=false
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: root

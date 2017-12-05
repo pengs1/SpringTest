@@ -1,0 +1,12 @@
+eclipse.preferences.version=1
+encoding//src/main/java/com/pss/chain/ProcessorChain.java=UTF-8
+encoding//src/main/java/com/pss/controller/DemoController.java=UTF-8
+encoding//src/main/java/com/pss/service/MessageProcessor.java=UTF-8
+encoding//src/main/java/com/pss/service/SendMessageByGateWayService.java=UTF-8
+encoding//src/main/java/com/pss/service/impl/MsgBodyProcessor.java=UTF-8
+encoding//src/main/java/com/pss/service/impl/MsgFooterProcessor.java=UTF-8
+encoding//src/main/java/com/pss/service/impl/MsgHeaderProcessor.java=UTF-8
+encoding//src/main/java/com/pss/test/MsgProcessorChainTest.java=UTF-8
+encoding//src/main/java/com/pss/test/RestTemplateTest.java=UTF-8
+encoding//src/main/java/com/pss/utils/RestTemplateUtils.java=UTF-8
+encoding//src/main/webapp/WEB-INF/ftl/macroTest.html=UTF-8

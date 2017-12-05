@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:integr="http://www.springframework.org/schema/integration"
+	xmlns:si-jms="http://www.springframework.org/schema/integration/jms"
+	xmlns:si-xml="http://www.springframework.org/schema/integration/xml"
+	default-lazy-init="false" default-autowire="no"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration/xml http://www.springframework.org/schema/integration/xml/spring-integration-xml-2.1.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-2.1.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
+		http://www.springframework.org/schema/integration/jms http://www.springframework.org/schema/integration/jms/spring-integration-jms-2.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+		
+	<!-- Channels defined -->
+	<integr:channel id="TU_ReadMessageChannel"></integr:channel>
+	<integr:channel id="TU_ValidatedUniqueName"></integr:channel>
+	<integr:channel id="TU_InvalidUniqueNameChannel"></integr:channel>
+	<integr:channel id="TU_SendToBackupQ"></integr:channel>
+	
+	<!-- Setup to read from queue -->
+	<bean id="messageContainer"
+		class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="concurrentConsumers" value="1" />
+		<property name="connectionFactory" ref="cacheMsgConsumerConnectionFactory" />
+		<property name="destination" ref="remoteQueue" />
+		<property name="taskExecutor" ref="taskExecutor" />
+		<property name="transactionManager" ref="transactionManager" />
+		<property name="autoStartup" value="false" />
+		<property name="errorHandler" ref="exceptionLogger"/>
+	</bean>
+	<task:executor id="taskExecutor" pool-size="20" queue-capacity="20" />
+	
+	<bean id="exceptionLogger" class="com.pss.integration.service.ExceptionLogger">
+		<property name="userId" value="pengs1" />
+	</bean>
+	
+	<!-- Start to Read message from the remote test queue -->
+	<si-jms:message-driven-channel-adapter
+		id="messageInboundAdapter" channel="TU_ReadMessageChannel" 
+		container="messageContainer" header-mapper="jmsHeaderMapper" auto-startup="true" />
+		
+	<!-- validate the message unique name -->
+	<integr:filter id="validteUniqueName" input-channel="TU_ReadMessageChannel" output-channel="TU_ValidatedUniqueName" discard-channel="TU_InvalidUniqueNameChannel" ref="messageUniqueNameValidator" method="validateName"></integr:filter>
+	
+	<!-- print out all message information -->
+	<integr:service-activator id="printAllInformation" input-channel="TU_ValidatedUniqueName" output-channel="TU_SendToBackupQ" ref="printMessageService" method="printAll"></integr:service-activator>
+	
+	<!-- Out put the message to backup Q -->
+	<si-jms:outbound-channel-adapter id="sendToBackupQ" channel="TU_SendToBackupQ" destination="remoteBackUpQ" connection-factory="cacheMsgProducerConnectionFactory"></si-jms:outbound-channel-adapter>
+
+	<!-- stop the flow -->
+	<integr:service-activator id="stopFlowService" input-channel="TU_InvalidUniqueNameChannel" ref="stopFlowService" method="stopFlow"></integr:service-activator>
+	
+	<!-- beans -->
+	<bean id="messageUniqueNameValidator" class="com.pss.integration.message.MessageUniqueNameValidator" />
+	<bean id="stopFlowService" class="com.pss.integration.message.StopFlowService"/>
+	<bean id="printMessageService" class="com.pss.integration.message.PrintMessageService" />
+	
+	<bean id="cacheMsgConsumerConnectionFactory"
+		class="org.springframework.jms.connection.CachingConnectionFactory">
+		<property name="targetConnectionFactory" ref="remoteConsumerConnectFactory" />
+		<property name="sessionCacheSize" value="1" />
+		<property name="reconnectOnException" value="true" />
+	</bean>
+</beans>
