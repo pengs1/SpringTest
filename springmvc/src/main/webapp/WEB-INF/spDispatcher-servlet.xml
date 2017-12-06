@@ -14,7 +14,7 @@
 
 	<!-- Scan path -->
 	<context:component-scan base-package="com.pss.*" />
-
+	
 	<!-- Anatation -->
 	<mvc:annotation-driven />
 	
@@ -55,6 +55,23 @@
 			<map>
 				<entry key="xml_escape" value-ref="fmXmlEscape"/>
 			</map>
+		</property>
+	</bean>
+	
+	<!-- 
+	②：启动Spring MVC的注解功能，完成请求和注解POJO的映射，
+	配置一个基于注解的定制的WebBindingInitializer，解决日期转换问题，方法级别的处理器映射
+	-->
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="cacheSeconds" value="0" />
+		<property name="webBindingInitializer">
+			<bean class="com.pss.utils.MyWebBinding" />
+		</property>
+		<!-- 配置一下对json数据的转换 -->
+		<property name="messageConverters">
+			<list>
+				<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"></bean>
+			</list>
 		</property>
 	</bean>
 	

@@ -30,6 +30,7 @@
 	<import resource="classpath:/META-INF/spring/appContext-Integration-SendMessageByGateway.xml" />
 	<import resource="classpath:/META-INF/spring/appContext-Integration-MessageProcessor.xml" />
 	<import resource="classpath:/META-INF/spring/headerMapperContext.xml" />
+	<import resource="classpath:/META-INF/spring/appContext-spring-mybatis.xml" />
 	
 	<bean id="propertyConfigurer"
 		class="org.springframework.web.context.support.ServletContextPropertyPlaceholderConfigurer">
@@ -90,7 +91,6 @@
 	<bean id="activeMqProducer" class="com.pss.utils.ActiveMqProducer">
 		<property name="jmsTemplate" ref="springJmsTemplate"/>
 	</bean>
-	
 	
 	<!-- Override the default log4j file by external one -->
 	<!-- 

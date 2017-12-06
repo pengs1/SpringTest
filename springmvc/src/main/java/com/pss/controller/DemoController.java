@@ -1,5 +1,6 @@
 package com.pss.controller;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +9,8 @@ import java.util.UUID;
 
 import javax.jms.JMSException;
 
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.pss.domain.JmsMessage;
 import com.pss.domain.User;
+import com.pss.mapper.UserMapper;
 import com.pss.repository.UserRepository;
 import com.pss.service.SendMessageByGateWayService;
 import com.pss.service.UserService;
@@ -117,5 +121,19 @@ public class DemoController {
 	@ResponseBody
 	private String getCurrentWeather() {
 		return restTemplateUtils.getWeather("上海").toString();
+	}
+	
+	@RequestMapping(value="/myUser", method=RequestMethod.GET)
+	@ResponseBody
+	private String getUserThroughMybatis() {
+		User user = userService.selectUser(4);
+		return user.getName();
+	}
+	
+	@RequestMapping(value="/myUsers", method=RequestMethod.GET)
+	@ResponseBody
+	private List<User> getAllUserMybatis() {
+		List<User> users = userService.listUsers();
+		return users;
 	}
 }
