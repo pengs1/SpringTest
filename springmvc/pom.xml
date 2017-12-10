@@ -15,7 +15,7 @@
 		<slf4j.version>1.6.2</slf4j.version>
 		<project.hibernate.version>4.1.7.Final</project.hibernate.version>
 		<mybatis.version>3.3.0</mybatis.version>
-		<spring.security.version>4.2.3.RELEASE</spring.security.version>
+		<!-- <spring.security.version>4.2.3.RELEASE</spring.security.version> -->
 	</properties>
 	
 	<dependencies>
@@ -142,6 +142,7 @@
 		</dependency>
 		
 		<!-- Spring Secrity -->
+		<!-- 	
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
@@ -151,7 +152,7 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
 			<version>${spring.security.version}</version>
-		</dependency>
+		</dependency> -->
 		
 		<dependency>
 			<groupId>org.springframework.integration</groupId>

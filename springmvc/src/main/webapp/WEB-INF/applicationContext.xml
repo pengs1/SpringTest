@@ -50,23 +50,16 @@
 		</property>
 	</bean>
 	
-	<!-- <bean id="propertyConfigurer"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="ignoreResourceNotFound" value="true" />
-		<property name="locations">
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames">
 			<list>
-				<value>classpath:com/pss/properties/application.properties</value>
-				<value>file:${EXTERNAL_PROPERTIES_DIR}/application.properties</value>
+				<value>classpath:com/pss/i18n/messages</value>
+				<!-- <value>file:${EXTERNAL_PROPERTIES_DIR}/messages</value> -->
 			</list>
 		</property>
-	</bean> -->
-	<!-- 
-	<bean id="propertyConfigurer"
-		class="org.springframework.web.context.support.ServletContextPropertyPlaceholderConfigurer">
-		<property name="properties" ref="properties" />
-		<property name="ignoreUnresolvablePlaceholders" value="true" />
+		<property name="cacheSeconds" value="0" />
+		<property name="defaultEncoding" value="UTF-8"/>
 	</bean>
-	 -->
 	<!-- 目的地queue -->
 	<jee:jndi-lookup id="remoteQueue" jndi-name="java:comp/env/${remote.testQueue}" />
 	
